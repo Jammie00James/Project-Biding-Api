@@ -28,10 +28,7 @@ COPY . .
 # Generate Prisma client
 RUN npx prisma generate
 
-RUN npx prisma migrate dev
-
 # Expose the dev port
 EXPOSE 3000
 
-# Run the app with nodemon or your dev script
-CMD ["npm", "run", "start:dev"]
+
