@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
         secret: secretKey,
       });
       // 💡 We're assigning the payload to the request object here
-      const user = await prisma.user.findUnique({ where: { id: payload.id } });
+      const user = await prisma.user.findUnique({ where: { id: payload.userId } });
       // so that we can access it in our route handlers
       if (!user) throw new UnauthorizedException();
       request['user'] = user;

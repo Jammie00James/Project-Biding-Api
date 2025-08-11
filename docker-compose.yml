@@ -20,7 +20,7 @@ services:
       - app-network
 
   api:
-    container_name: nestjs-dev
+    container_name: nestjs-dev1
     build:
       context: .
       dockerfile: Dockerfile

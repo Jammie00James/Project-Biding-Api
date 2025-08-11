@@ -29,8 +29,7 @@ export class AuthService {
       user.password,
     );
 
-    if (!isPasswordVerified)
-      throw new BadRequestException('invalid email/phoneNumber or password');
+    if (!isPasswordVerified) throw new BadRequestException('invalid email/phoneNumber or password');
 
     // 5. generate tokens
     const tokens = this._generateAuthTokenPairs(user.id, user.role);
@@ -63,7 +62,7 @@ export class AuthService {
         email: input.email,
         firstName: input.firstName,
         lastName: input.lastName,
-        password: input.password,
+        password: hash,
         role: input.role,
       },
     });
