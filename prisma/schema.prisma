@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum USER_ROLE {
+  HOMEOWNER
+  CONTRACTOR
+  PROJECT_MANAGER
+}
+
+enum PROJECT_STATUS {
+  OPEN
+  CLOSED
+  STATED
+  COMPLETED
+}
+
+enum MILESTONE_STATUS {
+  PENDING
+  COMPLETED
+  VERIFIED
+}
+
+// Models
+
+model User {
+  id              String    @id @default(uuid()) @db.Uuid
+  email           String    @unique
+  firstName       String
+  lastName        String
+  password        String
+  role            USER_ROLE
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  projects Project[]
+  bids     Bid[]
+}
+
+model Project {
+  id          String @id @default(uuid()) @db.Uuid
+  title       String
+  description String
+  location    String
+
+  status     PROJECT_STATUS @default(OPEN)
+  userId     String         @db.Uuid
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  created_at DateTime       @default(now())
+  bids       Bid[]
+  milestones  Milestone[]
+}
+
+model Bid {
+  id       String @id @default(uuid()) @db.Uuid
+  note     String
+  price    Float
+  duration String
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  projectId String  @db.Uuid
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+}
+
+model Milestone {
+  id     String           @id @default(uuid()) @db.Uuid
+  title  String
+  note   String
+  status MILESTONE_STATUS @default(PENDING)
+
+  projectId String  @db.Uuid
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+}
