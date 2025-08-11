@@ -63,7 +63,7 @@ export class AuthService {
         email: input.email,
         firstName: input.firstName,
         lastName: input.lastName,
-        password: input.password,
+        password: hash,
         role: input.role,
       },
     });
